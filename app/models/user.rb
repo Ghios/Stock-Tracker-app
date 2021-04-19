@@ -7,6 +7,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+
   def stock_already_tracked?(ticker_symbol)
     stock = Stock.check_db(ticker_symbol)
     return false unless stock
@@ -51,7 +53,9 @@ class User < ApplicationRecord
   
   def exept_current_user(users)
       users.reject{ |user| user.id == self.id }
-
   end
 
+  def not_friends_with?(id_friend)
+    !self.friends.where(id: id_friend).exists?
+  end
 end
